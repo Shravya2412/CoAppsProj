@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Attractions</title>
+</head>
+<body>
+    <h1>Welcome to Top Indian Places to Visit</h1>
+    <form action="{{ url_for('home') }}" method="POST">
+        <label for="search_query">Search Attractions:</label>
+        <input type="text" id="search_query" name="search_query" placeholder="Enter attraction name">
+        <button type="submit">Search</button>
+    </form>
+    <hr>
+    <h2>Get Recommendations</h2>
+    <form action="{{ url_for('recommendations') }}" method="POST">
+        <label for="attraction_type">Attraction Type:</label>
+        <input type="text" id="attraction_type" name="attraction_type" placeholder="Enter attraction type">
+        <br><br>
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" placeholder="Enter city">
+        <br><br>
+        <label for="state">State:</label>
+        <input type="text" id="state" name="state" placeholder="Enter state">
+        <br><br>
+        <button type="submit">Get Recommendations</button>
+    </form>
+</body>
+</html>

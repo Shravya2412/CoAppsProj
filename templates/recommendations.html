@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attraction Recommendations</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Attraction Recommendations</h1>
+    <ul>
+        {% for attraction in recommendations %}
+            <li>{{ attraction.Name }} - {{ attraction.Type }}
+                <form action="{{ url_for('rate_attraction') }}" method="POST">
+                    <input type="hidden" name="attraction_name" value="{{ attraction.Name }}">
+                    <label for="rating">Your Rating:</label>
+                    <input type="number" id="rating" name="rating" min="1" max="5" placeholder="Enter your rating (1-5)">
+                    <button type="submit">Rate</button>
+                </form>
+                {% if attraction.rated %}
+                    <p id="feedbackMessage" class="hidden">Thank you for your feedback!</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        // Function to show the feedback message and hide it after a delay
+        function showFeedbackMessage() {
+            var feedbackMessage = document.getElementById('feedbackMessage');
+            feedbackMessage.classList.remove('hidden');
+            setTimeout(function() {
+                feedbackMessage.classList.add('hidden');
+            }, 10000); // 10 seconds
+        }
+
+        // Call the function to show the feedback message
+        showFeedbackMessage();
+    </script>
+</body>
+</html>
