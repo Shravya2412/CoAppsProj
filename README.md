@@ -1,2 +1,2 @@
-# CoAppsProj
-"Travel Vista-Tailored travel destinations discovery":This recommends tourist places based on user preferences and also suggests users regarding the places to visit in a particular state along with some other information regarding the timings and price to visit the place.
+#Travel Vista
+"Travel Vista-Tailored travel destinations discovery":This provides interface for the travellers to visit tourist places based on user preferences like attraction name,type,city,state and enables users to give ratings for the recommended places.It also give detailed description about attraction searched by the user.This description includes zone,state,city,type,timings to visit,airplanes availabilility,google reviews,entrance fees etc for the detailed information of the attractions in India.This also provides users to give ratings and comment on the place."
