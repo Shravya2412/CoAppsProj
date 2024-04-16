@@ -3,27 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Attractions</title>
+    <title>Attraction Recommendations</title>
 </head>
 <body>
-    <h1>Welcome to Top Indian Places to Visit</h1>
-    <form action="{{ url_for('home') }}" method="POST">
-        <label for="search_query">Search Attractions:</label>
-        <input type="text" id="search_query" name="search_query" placeholder="Enter attraction name">
+    <h1>Attraction Recommendations</h1>
+    <h2>Search Attractions</h2>
+    <form action="/" method="post">
+        <label for="search_query">Enter attraction name:</label>
+        <input type="text" id="search_query" name="search_query">
         <button type="submit">Search</button>
     </form>
-    <hr>
     <h2>Get Recommendations</h2>
-    <form action="{{ url_for('recommendations') }}" method="POST">
-        <label for="attraction_type">Attraction Type:</label>
-        <input type="text" id="attraction_type" name="attraction_type" placeholder="Enter attraction type">
-        <br><br>
+    <form action="/recommendations" method="post">
         <label for="city">City:</label>
-        <input type="text" id="city" name="city" placeholder="Enter city">
-        <br><br>
+        <input type="text" id="city" name="city">
         <label for="state">State:</label>
-        <input type="text" id="state" name="state" placeholder="Enter state">
-        <br><br>
+        <input type="text" id="state" name="state">
+        <label for="type">Attraction Type:</label>
+        <input type="text" id="type" name="type">
         <button type="submit">Get Recommendations</button>
     </form>
 </body>
