@@ -4,117 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attraction Information</title>
-    <style>
-        .rating {
-            unicode-bidi: bidi-override;
-            direction: rtl;
-            text-align: center;
-            font-size: 24px; /* Adjust the font size as needed */
-            margin-bottom: 10px; /* Add some space below the ratings */
-        }
-        .rating > span {
-            display: inline-block;
-            position: relative;
-            width: 1.5em;
-            color: #ccc; /* Default color for ratings */
-            cursor: pointer; /* Add cursor pointer for better UX */
-        }
-        .rating > span:hover:before,
-        .rating > span:hover ~ span:before,
-        .rating > span.selected:before {
-            content: attr(data-rating); /* Show the rating number */
-            position: absolute;
-            color: gold; /* Gold color for selected ratings */
-        }
-        #comment {
-            width: 100%; /* Set the width to 100% */
-            padding: 10px; /* Add some padding for better appearance */
-            box-sizing: border-box; /* Include padding in the width calculation */
-            margin-bottom: 10px; /* Add some space below the comment box */
-        }
-        #rateBtn {
-            display: block;
-            margin: 0 auto; /* Center the button horizontally */
-        }
-    </style>
 </head>
 <body>
-    <h1>{{ attraction['Name'] }}</h1>
-    <p>Type: {{ attraction['Type'] }}</p>
-    <p>Zone: {{ attraction['Zone'] }}</p>
-    <p>State: {{ attraction['State'] }}</p>
-    <p>City: {{ attraction['City'] }}</p>
-    <p>Establishment Year: {{ attraction['Establishment Year'] }}</p>
-    <p>Time Needed to Visit (hrs): {{ attraction['time needed to visit in hrs'] }}</p>
-    <p>Google Review Rating: {{ attraction['Google review rating'] }}</p>
-    <p>Entrance Fee (INR): {{ attraction['Entrance Fee in INR'] }}</p>
-    <p>Airport within 50km Radius: {{ attraction['Airport with 50km Radius'] }}</p>
-    <p>Weekly Off: {{ attraction['Weekly Off'] }}</p>
-    <p>Significance: {{ attraction['Significance'] }}</p>
-    <p>DSLR Allowed: {{ attraction['DSLR Allowed'] }}</p>
-    <p>Number of Google Reviews (in lakhs): {{ attraction['Number of google review in lakhs'] }}</p>
-    <p>Best Time to Visit: {{ attraction['Best Time to visit'] }}</p>
-    <!-- Add more details as needed -->
-    
-    <!-- Rating -->
-    <div class="rating">
-        <span data-rating="5">5</span>
-        <span data-rating="4">4</span>
-        <span data-rating="3">3</span>
-        <span data-rating="2">2</span>
-        <span data-rating="1">1</span>
+    <h1>Attraction Information</h1>
+    <div>
+        <h2>{{ attraction['Name'] }}</h2>
+        <p><strong>Zone:</strong> {{ attraction['Zone'] }}</p>
+        <p><strong>State:</strong> {{ attraction['State'] }}</p>
+        <p><strong>City:</strong> {{ attraction['City'] }}</p>
+        <p><strong>Type:</strong> {{ attraction['Type'] }}</p>
+        <p><strong>Establishment Year:</strong> {{ attraction['Establishment Year'] }}</p>
+        <p><strong>Time Needed to Visit (in hrs):</strong> {{ attraction['time needed to visit in hrs'] }}</p>
+        <p><strong>Google Review Rating:</strong> {{ attraction['Google review rating'] }}</p>
+        <p><strong>Entrance Fee (in INR):</strong> {{ attraction['Entrance Fee in INR'] }}</p>
+        <p><strong>Airport with 50km Radius:</strong> {{ attraction['Airport with 50km Radius'] }}</p>
+        <p><strong>Weekly Off:</strong> {{ attraction['Weekly Off'] }}</p>
+        <p><strong>Significance:</strong> {{ attraction['Significance'] }}</p>
+        <p><strong>DSLR Allowed:</strong> {{ attraction['DSLR Allowed'] }}</p>
+        <p><strong>Number of Google Reviews (in lakhs):</strong> {{ attraction['Number of google review in lakhs'] }}</p>
+        <p><strong>Best Time to Visit:</strong> {{ attraction['Best Time to visit'] }}</p>
     </div>
-    
-    <!-- Comment form -->
-    <form id="commentForm" action="{{ url_for('rate_attraction') }}" method="POST">
-        <input type="hidden" id="attraction_name" name="attraction_name" value="{{ attraction['Name'] }}">
-        <input type="hidden" id="rating" name="rating" value="">
-        <textarea id="comment" name="comment" placeholder="Add your comment" rows="4"></textarea>
-        <button type="submit" id="rateBtn">Rate & Comment</button>
-    </form>
-    
-    <!-- Message display -->
-    <div id="message" style="display:none;">
-        Thank you for your feedback!
-    </div>
-
-    <script>
-        // Function to set the selected rating
-        function setRating(rating) {
-            document.getElementById('rating').value = rating;
-            // Remove selected class from all ratings
-            document.querySelectorAll('.rating > span').forEach(function(span) {
-                span.classList.remove('selected');
-            });
-            // Add selected class to ratings up to the selected rating
-            for (let i = 1; i <= rating; i++) {
-                document.querySelector(`.rating > span[data-rating="${i}"]`).classList.add('selected');
-            }
-        }
-
-        // Event listeners for ratings
-        document.querySelectorAll('.rating > span').forEach(function(span) {
-            span.addEventListener('click', function() {
-                setRating(this.getAttribute('data-rating'));
-            });
-        });
-
-        // Submit form and display message
-        document.getElementById('commentForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            var form = event.target;
-            var formData = new FormData(form);
-            fetch(form.action, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (response.ok) {
-                    document.getElementById('message').style.display = 'block';
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    </script>
 </body>
 </html>
