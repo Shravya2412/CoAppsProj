@@ -1,11 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
 import pandas as pd
+import joblib  # Import joblib to load the trained model
+from model import train_model  # Import train_model function to load the model
 
 app = Flask(__name__)
 
 # Load the dataset
-data = pd.read_csv("C:/Users/Hp/OneDrive/Desktop/TravelVista/data/Top Indian Places to Visit.csv")
+data = pd.read_csv("C:/Users/bhavy/OneDrive/Desktop/TravelVista/data/Top Indian Places to Visit.csv")
+
+# Load the trained model
+model_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "model.pkl")
+model = joblib.load(model_file_path)
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -22,6 +28,39 @@ def home():
             return render_template('no_search_found.html')
     return render_template('index.html')
 
+@app.route('/recommendations', methods=['GET', 'POST'])
+def recommendations():
+    if request.method == 'POST':
+        # Get user preferences from the form
+        # Note: You can add more fields as needed for preferences
+        city = request.form['city']
+        state = request.form['state']
+        type=request.form['type']
+
+        # Initialize filtered data with the full dataset
+        filtered_data = data
+        
+        # Apply filtering based on user preferences
+        if city:
+            filtered_data = filtered_data[filtered_data['City'].str.lower() == city.lower()]
+        if state:
+            filtered_data = filtered_data[filtered_data['State'].str.lower() == state.lower()]
+        if type:
+            filtered_data = filtered_data[filtered_data['Type'].str.lower() == type.lower()]
+        
+        
+        if not filtered_data.empty:
+            # Use the trained model to make predictions
+            predictions = model.predict(filtered_data)  # Assuming the model predicts the best time to visit
+            # Add the predictions to the filtered data
+            filtered_data['Predicted_Best_Time'] = predictions
+            
+            # Convert filtered data to dictionary format for rendering
+            recommendations = filtered_data.to_dict(orient='records')
+            return render_template('recommendations.html', recommendations=recommendations)
+    
+    return render_template('recommendations.html', recommendations=[])
+
 @app.route('/attraction_info/<attraction_name>')
 def attraction_info(attraction_name):
     # Retrieve attraction information based on the attraction name
@@ -31,43 +70,6 @@ def attraction_info(attraction_name):
         return render_template('attraction_info.html', attraction=attraction)
     else:
         return render_template('no_search_found.html')
-
-@app.route('/recommendations', methods=['GET', 'POST'])
-def recommendations():
-    if request.method == 'POST':
-        # Get user preferences from the form
-        attraction_type = request.form['attraction_type']
-        city = request.form['city']
-        state = request.form['state']
-        
-        # Initialize filtered data with the full dataset
-        filtered_data = data
-        
-        # Apply filtering based on user preferences
-        if attraction_type:
-            filtered_data = filtered_data[filtered_data['Type'].str.lower() == attraction_type.lower()]
-        if city:
-            filtered_data = filtered_data[filtered_data['City'].str.lower() == city.lower()]
-        if state:
-            filtered_data = filtered_data[filtered_data['State'].str.lower() == state.lower()]
-        
-        if filtered_data.empty:
-            return render_template('no_recommendation_found.html')
-        else:
-            # Convert filtered data to dictionary format for rendering
-            recommendations = filtered_data.to_dict(orient='records')
-            return render_template('recommendations.html', recommendations=recommendations)
-    
-    return render_template('recommendations.html', recommendations=[])
-
-@app.route('/rate_attraction', methods=['POST'])
-def rate_attraction():
-    attraction_name = request.form['attraction_name']
-    rating = request.form['rating']
-    # Here you can handle the rating, such as saving it to a database
-    # After handling the rating, redirect back to the recommendations page
-    return redirect(url_for('recommendations'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)
